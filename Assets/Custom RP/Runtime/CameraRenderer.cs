@@ -12,13 +12,19 @@ public partial class CameraRenderer
         name = defaultBufferName
     };
 
-    static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
+    static ShaderTagId
+        unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit"),
+        litShaderTagId = new ShaderTagId("CustomLit");
+
+    // Lights
+    Lighting lighting = new Lighting(); // Customly Defined Lighting Settings
 
     public void Render(
         ScriptableRenderContext context,
         Camera camera,
         bool useDyanmicBatching,
-        bool useGPUInstancing
+        bool useGPUInstancing,
+        ShadowSettings shadowSettings
     )
     {
         this.context = context;
@@ -27,28 +33,32 @@ public partial class CameraRenderer
         // Pipeline Preparation
         PrepareBuffer(); 
 
-        if (!Cull())
+        if (!Cull(shadowSettings.maxDistance))
         {
             return;
         }
 
+        buffer.BeginSample(SampleName);
+        ExecuteBuffer();
+        lighting.Setup(context, cullingResults, shadowSettings);
+        buffer.EndSample(SampleName);
         Setup();
-        
         DrawVisibleGeometry(useDyanmicBatching, useGPUInstancing);
         DrawUnsupportedShaders();
         DrawGizmos();
+        lighting.Cleanup();
 
         Submit();
     }
 
     void DrawVisibleGeometry(bool useDynamicBatching, bool useGPUInstancing)
     {
-        // Opaque Drawing
         var sortingSettings = new SortingSettings(camera)
         {
             criteria = SortingCriteria.CommonOpaque
         };
-
+        
+        // Unlit/Lit Passes
         var drawingSettings = new DrawingSettings(
             unlitShaderTagId, sortingSettings
         )
@@ -56,7 +66,7 @@ public partial class CameraRenderer
             enableDynamicBatching = useDynamicBatching,
             enableInstancing = useGPUInstancing
         };
-        
+        drawingSettings.SetShaderPassName(1, litShaderTagId);
 
         var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
 
@@ -64,6 +74,7 @@ public partial class CameraRenderer
             cullingResults, ref drawingSettings, ref filteringSettings
         );
 
+        // Skybox
         context.DrawSkybox(camera);
 
         // Draw Transparent Objects after Skybox
@@ -79,7 +90,7 @@ public partial class CameraRenderer
     void Submit()
     {
         buffer.EndSample(SampleName);
-        ExecuteBffer();
+        ExecuteBuffer();
         context.Submit();
     }
 
@@ -94,19 +105,20 @@ public partial class CameraRenderer
                 camera.backgroundColor.linear : Color.clear
         );
         buffer.BeginSample(SampleName);
-        ExecuteBffer();
+        ExecuteBuffer();
     }
 
-    void ExecuteBffer()
+    void ExecuteBuffer()
     {
         context.ExecuteCommandBuffer(buffer);
         buffer.Clear();
     }
 
-    bool Cull()
+    bool Cull(float maxShadowDistance)
     {
         if (camera.TryGetCullingParameters(out ScriptableCullingParameters p))
         {
+            p.shadowDistance = Mathf.Min(maxShadowDistance, camera.farClipPlane);
             cullingResults = context.Cull(ref p);
             return true;
         }
