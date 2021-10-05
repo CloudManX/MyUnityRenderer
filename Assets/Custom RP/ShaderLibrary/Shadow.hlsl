@@ -51,7 +51,7 @@ float SampleDirectionalShadowAtlas(float3 positionSTS)
     );
 }
 
-
+// PCF filtering with Tent function
 float FilterDirectionalShadow(float3 positionSTS)
 {
     #if defined(DIRECTIONAL_FILTER_SETUP)
@@ -109,6 +109,16 @@ ShadowData GetShadowData(Surface surfaceWS)
     {
         data.strength = 0.0;
     }
+    #if defined(_CASCADE_BLEND_DITHER)
+        else if (data.cascadeBlend < surfaceWS.dither) {
+            i += 1;
+        }
+    #endif
+
+    #if !defined(_CASCADE_BLEND_SOFT) // Hard Shadow
+        data.cascadeBlend = 1.0f;
+    #endif
+
     data.cascadeIndex = i;
     return data;
 }
@@ -117,6 +127,10 @@ float GetDirectionalShadowAttenuation(
     DirectionalShadowData directional, ShadowData global, Surface surfaceWS
 )
 {
+    #if !defined(_RECEIVE_SHADOWS)
+        return 1.0;
+    #endif
+
     if (directional.strength <= 0.0)
     {
         return 1.0;
@@ -129,7 +143,7 @@ float GetDirectionalShadowAttenuation(
     ).xyz;
     float shadow = FilterDirectionalShadow(positionSTS);
 
-    if (global.cascadeBlend < 1.0)
+    if (global.cascadeBlend < 1.0) // Blend with next cascade except the last one
     {
         float3 normalBias = 
             surfaceWS.normal * (directional.normalBias * _CascadeData[global.cascadeIndex + 1].y);
