@@ -1,5 +1,11 @@
 Shader "CustomRP/Unlit" 
 {
+
+	HLSLINCLUDE
+	#include "../ShaderLibrary/Common.hlsl"
+	#include "LitInput.hlsl"
+	ENDHLSL
+
 	Properties 
 	{
 		_BaseMap("Texture", 2D) = "white" {}

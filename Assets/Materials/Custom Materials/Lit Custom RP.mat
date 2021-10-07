@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Lit Custom RP
   m_Shader: {fileID: 4800000, guid: 7fbecda40ccfb064ba8230a44641ed9d, type: 3}
-  m_ShaderKeywords: _SHADOWS_DITHER
+  m_ShaderKeywords: _RECEIVE_SHADOWS _SHADOWS_DITHER
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -74,7 +74,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _PremulAlpha: 0
-    - _ReceiveShadows: 0
+    - _ReceiveShadows: 1
     - _Shadows: 2
     - _Smoothness: 0.672
     - _SmoothnessTextureChannel: 0
