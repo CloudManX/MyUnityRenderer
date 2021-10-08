@@ -36,7 +36,7 @@ Varyings ShadowCasterPassVertex (Attributes input)
     return output;
 }
 
-float4 ShadowCasterPassFragment (Varyings input) : SV_Target
+float4 ShadowCasterPassFragment (Varyings input) : SV_TARGET
 {
     UNITY_SETUP_INSTANCE_ID(input);
     float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.baseUV);
