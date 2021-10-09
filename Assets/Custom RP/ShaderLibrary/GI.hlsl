@@ -12,7 +12,7 @@ SAMPLER(samplerunity_ProbeVolumeSH);
 
 #if defined(LIGHTMAP_ON)
     #define GI_ATTRIBUTE_DATA float2 lightMapUV : TEXCOORD1;
-    #define GI_VARYINGS_DATA float2 lightMapUV : F_LIGHT_MAP_UV;
+    #define GI_VARYINGS_DATA float2 lightMapUV : VAR_LIGHT_MAP_UV;
     #define TRANSFER_GI_DATA(input, output) \
         output.lightMapUV = input.lightMapUV  * \
         unity_LightmapST.xy + unity_LightmapST.zw;
@@ -51,7 +51,7 @@ float3 SampleLightMap (float2 lightMapUV) {
 float3 SampleLightProbe(Surface surfaceWS)
 {
     #if defined(LIGHTMAP_ON)
-        // Return 0 for lightmapped objects
+        // Return 0 for lightmapped objects, they contribute to GI, not receive.
         return 0.0;
     #else 
         if (unity_ProbeVolumeParams.x)
