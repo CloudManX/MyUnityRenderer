@@ -82,7 +82,7 @@ float3 SampleLightProbe(Surface surfaceWS)
 GI GetGI(float2 lightMapUV, Surface surfaceWS)
 {
     GI gi;
-    gi.diffuse = SampleLightMap(lightMapUV) + SampleLightProbe(surfaceWS);
+    gi.diffuse = SampleLightMap(lightMapUV) + 3.0 * SampleLightProbe(surfaceWS);
     return gi;
 }
 
