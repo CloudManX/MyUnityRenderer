@@ -30,11 +30,18 @@ float4x4 _DirectionalShadowMatrices
     [MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT * MAX_CASCADE_COUNT];
 CBUFFER_END
 
+struct ShadowMask
+{
+    bool distance;
+    float4 shadows;
+};
+
 struct ShadowData
 {
     int cascadeIndex;
     float cascadeBlend;
     float strength;
+    ShadowMask shadowMask;
 };
 
 struct DirectionalShadowData
@@ -77,9 +84,15 @@ float FadedShadowStrength(float distance, float scale, float fade)
     return saturate((1.0 - distance * scale) * fade);
 }
 
+
 ShadowData GetShadowData(Surface surfaceWS)
 {
     ShadowData data;
+
+    // Shadow Masks    
+    data.shadowMask.distance = false;
+    data.shadowMask.shadows = 1.0;
+
     data.cascadeBlend = 1.0;
     data.strength = FadedShadowStrength(
         surfaceWS.depth, _ShadowDistanceFade.x, _ShadowDistanceFade.y 
@@ -123,14 +136,10 @@ ShadowData GetShadowData(Surface surfaceWS)
     return data;
 }
 
-float GetDirectionalShadowAttenuation(
+float GetCascadedShadow (
     DirectionalShadowData directional, ShadowData global, Surface surfaceWS
 )
 {
-    #if !defined(_RECEIVE_SHADOWS)
-        return 1.0;
-    #endif
-
     if (directional.strength <= 0.0)
     {
         return 1.0;
@@ -155,8 +164,51 @@ float GetDirectionalShadowAttenuation(
             FilterDirectionalShadow(positionSTS), shadow, global.cascadeBlend
         );
     }
+    return shadow;
+}
 
-    return lerp(1.0, shadow, directional.strength);
+float GetBakedShadow(ShadowMask mask)
+{
+    float shadow = 1.0;
+    if (mask.distance)
+    {
+        shadow = mask.shadows.r; // Red Channel is shadow in shadow mask
+    }
+    return shadow;
+}
+
+float MixBakedAndRealTimeShadows (
+    ShadowData global, float shadow, float strength
+)
+{
+    float baked = GetBakedShadow(global.shadowMask);
+    if (global.shadowMask.distance)
+    {
+        shadow = baked;
+    }
+    return lerp(1.0, shadow, strength);
+}
+
+float GetDirectionalShadowAttenuation(
+    DirectionalShadowData directional, ShadowData global, Surface surfaceWS
+)
+{
+    #if !defined(_RECEIVE_SHADOWS)
+        return 1.0;
+    #endif
+
+    float shadow;
+    if (directional.strength <= 0.0)
+    {
+        shadow = 1.0;
+    }
+    else
+    {
+        shadow = GetCascadedShadow(directional, global, surfaceWS);
+        shadow = MixBakedAndRealTimeShadows(global, shadow, directional.strength);
+    }
+
+    return shadow;
 }
 
 #endif

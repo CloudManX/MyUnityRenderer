@@ -68,8 +68,11 @@ public partial class CameraRenderer
             // GI Per Object Data
             perObjectData = 
                 PerObjectData.Lightmaps | 
+                PerObjectData.ShadowMask |
                 PerObjectData.LightProbe |
-                PerObjectData.LightProbeProxyVolume
+                PerObjectData.OcclusionProbe |
+                PerObjectData.LightProbeProxyVolume |
+                PerObjectData.OcclusionProbeProxyVolume
         };
         drawingSettings.SetShaderPassName(1, litShaderTagId);
 
