@@ -22,6 +22,17 @@ float3 DirectBRDF(Surface surface, BRDF brdf, Light light)
     return SpecularStrength(surface, brdf, light) * brdf.specular + brdf.diffuse;
 }
 
+float3 InDirectBRDF(
+    Surface surface, BRDF brdf, float3 diffuse, float3 specular
+) 
+{
+    float fresnelStrength = surface.fresnelStrength * Pow4(1.0 - saturate(dot(surface.normal, surface.viewDir)));
+    // float3 reflection = specular * brdf.specular;
+    float3 reflection = specular * lerp(brdf.specular, 1.0 - brdf.specular, fresnelStrength);
+    reflection /= brdf.roughness * brdf.roughness + 1.0;
+    return diffuse * brdf.diffuse + reflection;
+}
+
 float3 GetLighting(Surface surface, BRDF brdf, Light light)
 {
     return IncomingLight(surface, light) * DirectBRDF(surface, brdf, light);
@@ -44,8 +55,10 @@ float3 GetLighting (Surface surfaceWS, BRDF brdf, GI gi)
 {
     ShadowData shadowData = GetShadowData(surfaceWS);
     shadowData.shadowMask = gi.shadowMask;
-    return gi.shadowMask.shadows.rgb;
-    float3 color = gi.diffuse * brdf.diffuse;
+    // return gi.shadowMask.shadows.rgb;
+
+    float3 color = InDirectBRDF(surfaceWS, brdf, gi.diffuse, gi.specular);
+    // float3 color = brdf.diffuse * gi.diffuse;
     for (int i = 0; i < GetDirectionalLightCount(); ++i)
     {
         Light light = GetDirectionalLight(i, surfaceWS, shadowData);

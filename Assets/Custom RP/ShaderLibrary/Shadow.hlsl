@@ -32,6 +32,7 @@ CBUFFER_END
 
 struct ShadowMask
 {
+    bool always;
     bool distance;
     float4 shadows;
 };
@@ -49,6 +50,7 @@ struct DirectionalShadowData
     float strength;
     int tileIndex;
     float normalBias;
+    int shadowMaskChannel;
 };
 
 float SampleDirectionalShadowAtlas(float3 positionSTS)
@@ -90,6 +92,7 @@ ShadowData GetShadowData(Surface surfaceWS)
     ShadowData data;
 
     // Shadow Masks    
+    data.shadowMask.always = false;
     data.shadowMask.distance = false;
     data.shadowMask.shadows = 1.0;
 
@@ -167,26 +170,48 @@ float GetCascadedShadow (
     return shadow;
 }
 
-float GetBakedShadow(ShadowMask mask)
+float GetBakedShadow(ShadowMask mask, int channel)
 {
     float shadow = 1.0;
-    if (mask.distance)
+    if (mask.always || mask.distance)
     {
-        shadow = mask.shadows.r; // Red Channel is shadow in shadow mask
+        if (channel >= 0)
+        {
+            shadow = mask.shadows[channel];
     }
+        }
     return shadow;
 }
 
+float GetBakedShadow(ShadowMask mask, int channel, float strength)
+{
+    if (mask.always || mask.distance)
+    {
+        return lerp(1.0, GetBakedShadow(mask, channel), strength);
+    }
+    return 1.0;
+}
+
 float MixBakedAndRealTimeShadows (
-    ShadowData global, float shadow, float strength
+    ShadowData global, float shadow, int shadowMaskChannel, float strength
+    // global is very confusing naming here, it actually means the global shadow setting
+    // aside from individual light shadow setting, not much related to GI
 )
 {
-    float baked = GetBakedShadow(global.shadowMask);
+    float baked = GetBakedShadow(global.shadowMask, shadowMaskChannel);
+    if (global.shadowMask.always)
+    {
+        shadow = lerp(1.0, shadow, global.strength);
+        shadow = min(baked, shadow); // select the one hat is darker.
+        return lerp(1.0, shadow, strength);
+    }
     if (global.shadowMask.distance)
     {
-        shadow = baked;
+        shadow = lerp(baked, shadow, global.strength);
+        return lerp(1.0, shadow, strength);
     }
-    return lerp(1.0, shadow, strength);
+    // stength is directional light shadow strength, global.strength is shadow global setting
+    return lerp(1.0, shadow, strength * global.strength);
 }
 
 float GetDirectionalShadowAttenuation(
@@ -198,14 +223,14 @@ float GetDirectionalShadowAttenuation(
     #endif
 
     float shadow;
-    if (directional.strength <= 0.0)
+    if (directional.strength * global.strength <= 0.0)
     {
-        shadow = 1.0;
+        shadow = GetBakedShadow(global.shadowMask, directional.shadowMaskChannel, abs(directional.strength));
     }
     else
     {
         shadow = GetCascadedShadow(directional, global, surfaceWS);
-        shadow = MixBakedAndRealTimeShadows(global, shadow, directional.strength);
+        shadow = MixBakedAndRealTimeShadows(global, shadow, directional.shadowMaskChannel, directional.strength);
     }
 
     return shadow;

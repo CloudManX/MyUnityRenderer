@@ -10,6 +10,7 @@ CBUFFER_START(UnityPerDraw)
     float4 unity_LightmapST;
     float4 unity_DynamicLightmapST;
     float4 unity_ProbesOcclusion;
+    float4 unity_SpecCube0_HDR;
 
     // light probe
     float4 unity_SHAr;

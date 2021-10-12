@@ -13,7 +13,7 @@
 #include "UnityInput.hlsl"
 
 // Enable shadow mask drawing for dynamic object instancing
-#if defined(_SHADOW_MASK_DISTANCE)
+#if defined(_SHADOW_MASK_ALWAYS) || defined(_SHADOW_MASK_DISTANCE)
     #define SHADOWS_SHADOWMASK
 #endif 
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
@@ -30,6 +30,15 @@ float Square(float v)
 float DistanceSquared(float3 pA, float3 pB)
 {
     return dot(pA - pB, pA - pB);
+}
+
+void ClipLOD(float2 positionCS, float fade)
+{
+    #if defined(LOD_FADE_CROSSFADE)
+        // float dither = (positionCS.y % 32) / 32;
+        float dither = InterleavedGradientNoise(positionCS.xy, 0);
+        clip(fade + (fade < 0 ? dither : -dither));
+    #endif
 }
 
 #endif

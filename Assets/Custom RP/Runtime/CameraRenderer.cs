@@ -67,6 +67,7 @@ public partial class CameraRenderer
             enableInstancing = useGPUInstancing,
             // GI Per Object Data
             perObjectData = 
+                PerObjectData.ReflectionProbes | 
                 PerObjectData.Lightmaps | 
                 PerObjectData.ShadowMask |
                 PerObjectData.LightProbe |
