@@ -148,7 +148,7 @@ float GetCascadedShadow (
         return 1.0;
     }
     float3 normalBias = 
-        surfaceWS.normal * (directional.normalBias * _CascadeData[global.cascadeIndex].y);
+        surfaceWS.interpolatedNormal * (directional.normalBias * _CascadeData[global.cascadeIndex].y);
     float3 positionSTS = mul(
         _DirectionalShadowMatrices[directional.tileIndex], 
         float4(surfaceWS.position + normalBias, 1.0)
@@ -158,7 +158,7 @@ float GetCascadedShadow (
     if (global.cascadeBlend < 1.0) // Blend with next cascade except the last one
     {
         float3 normalBias = 
-            surfaceWS.normal * (directional.normalBias * _CascadeData[global.cascadeIndex + 1].y);
+            surfaceWS.interpolatedNormal * (directional.normalBias * _CascadeData[global.cascadeIndex + 1].y);
         float3 positionSTS = mul(
             _DirectionalShadowMatrices[directional.tileIndex + 1], 
             float4(surfaceWS.position + normalBias, 1.0)

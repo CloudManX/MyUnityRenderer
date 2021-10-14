@@ -8,6 +8,7 @@ public class PerObjectMaterialProperties : MonoBehaviour
         baseColorId = Shader.PropertyToID("_BaseColor"),
         cutoffId = Shader.PropertyToID("_Cutoff"),
         metallicId = Shader.PropertyToID("_Metallic"),
+        occlusionId = Shader.PropertyToID("_Occlusion"),
         smoothnessId = Shader.PropertyToID("_Smoothness"),
         fresnelId = Shader.PropertyToID("_Fresnel"),
         emissionColorId = Shader.PropertyToID("_EmissionColor");
@@ -19,7 +20,8 @@ public class PerObjectMaterialProperties : MonoBehaviour
     Color baseColor = Color.white;
 
     [SerializeField, Range(0.001f, 1f)]
-    float alphaCutoff = 0.5f, metallic = 0f, smoothness = 0.5f, fresnelStrength = 1.0f;
+    float alphaCutoff = 0.5f, metallic = 0f, smoothness = 0.5f, 
+        occlusion = 0.5f, fresnelStrength = 1.0f;
 
     [SerializeField, ColorUsage(false, true)]
     Color emissionColor = Color.black;
@@ -32,6 +34,7 @@ public class PerObjectMaterialProperties : MonoBehaviour
         block.SetColor(baseColorId, baseColor);
         block.SetFloat(cutoffId, alphaCutoff);
         block.SetFloat(metallicId, metallic);
+        block.SetFloat(occlusionId, occlusion);
         block.SetFloat(smoothnessId, smoothness);
         block.SetFloat(fresnelId, fresnelStrength);
         block.SetColor(emissionColorId, emissionColor);

@@ -17,7 +17,7 @@ public class CustomRenderPipelineAsset : RenderPipelineAsset
     }
 }
 
-public class CustomRenderPipeline : RenderPipeline 
+public partial class CustomRenderPipeline : RenderPipeline 
 {
     CameraRenderer renderer = new CameraRenderer();
 
@@ -34,6 +34,8 @@ public class CustomRenderPipeline : RenderPipeline
         this.shadowSettings = shadowSettings;
         GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
         GraphicsSettings.lightsUseLinearIntensity = true;
+        
+        InitializeForEditor();
     }
 
     protected override void Render(

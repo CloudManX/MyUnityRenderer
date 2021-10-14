@@ -3,6 +3,7 @@
 
 // Uniform
 TEXTURE2D(_BaseMap);
+TEXTURE2D(_MaskMap);
 TEXTURE2D(_EmissionMap);
 SAMPLER(sampler_BaseMap);
 
@@ -52,6 +53,11 @@ float GetFresnel(float2 baseUV)
 float3 GetEmission(float2 baseUV)
 {
     return GetBase(baseUV).rgb;
+}
+
+float4 GetMask(float2 baseUV)
+{
+    return 0.0;
 }
 
 #endif
