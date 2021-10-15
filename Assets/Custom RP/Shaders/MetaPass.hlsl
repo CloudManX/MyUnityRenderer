@@ -49,7 +49,7 @@ float4 MetaPassFragment(Varyings input) : SV_TARGET
     {
         meta.rgb += brdf.diffuse + brdf.specular * brdf.roughness * 0.5;
         meta.rgb = min(
-            PositivePow(meta.rgb, unity_OneOverOutputBoost), unity_MaxOutputValue
+            PositivePow(meta.rgb, unity_OneOverOutputBoost), unity_MaxOutputValue // Unity Boosts Diffuse Reflectivity
         );
     }
     else if (unity_MetaFragmentControl.y)

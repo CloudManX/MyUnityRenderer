@@ -35,7 +35,7 @@ public partial class CustomRenderPipeline : RenderPipeline
         GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
         GraphicsSettings.lightsUseLinearIntensity = true;
         
-        InitializeForEditor();
+        // InitializeForEditor();
     }
 
     protected override void Render(

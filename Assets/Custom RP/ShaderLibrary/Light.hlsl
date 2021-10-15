@@ -8,7 +8,7 @@ CBUFFER_START(_CustomLight)
     int _DirectionalLightCount;
     float4 _DirectionalLightColors[MAX_DIRECTIONAL_LIGHT_COUNT];
     float4 _DirectionalLightDirections[MAX_DIRECTIONAL_LIGHT_COUNT];
-    float4 _DirectionalLightShadowData[MAX_DIRECTIONAL_LIGHT_COUNT]; // float2?
+    float4 _DirectionalLightShadowData[MAX_DIRECTIONAL_LIGHT_COUNT];
 
     int _OtherLightCount;
     float4 _OtherLightColors[MAX_OTHER_LIGHT_COUNT];

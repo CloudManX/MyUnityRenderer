@@ -53,6 +53,12 @@ struct DirectionalShadowData
     int shadowMaskChannel;
 };
 
+struct OtherShadowData
+{
+    float strength;
+    int shadowMaskChannel;
+}
+
 float SampleDirectionalShadowAtlas(float3 positionSTS)
 {
     return SAMPLE_TEXTURE2D_SHADOW(
@@ -202,7 +208,7 @@ float MixBakedAndRealTimeShadows (
     if (global.shadowMask.always)
     {
         shadow = lerp(1.0, shadow, global.strength);
-        shadow = min(baked, shadow); // select the one hat is darker.
+        shadow = min(baked, shadow); // select the one that is darker.
         return lerp(1.0, shadow, strength);
     }
     if (global.shadowMask.distance)
@@ -233,6 +239,30 @@ float GetDirectionalShadowAttenuation(
         shadow = MixBakedAndRealTimeShadows(global, shadow, directional.shadowMaskChannel, directional.strength);
     }
 
+    return shadow;
+}
+
+float GetOtherShadowAttenuation(
+    OtherShadowData other, ShadowData global, Surface surfaceWS
+)
+{
+    #if !defined(_RECEIVE_SHADOWS)
+        return 1.0;
+    #endif
+
+    float shadow;
+    if (other.strength > 0.0)
+    {
+        shadow = GetBakedShadow(
+            global.shadowMask, 
+            other.shadowMaskChannel, 
+            abs(other.strength)
+        );
+    }
+    else
+    {
+        shadow = 1.0;
+    }
     return shadow;
 }
 
