@@ -57,7 +57,7 @@ struct OtherShadowData
 {
     float strength;
     int shadowMaskChannel;
-}
+};
 
 float SampleDirectionalShadowAtlas(float3 positionSTS)
 {
@@ -127,7 +127,7 @@ ShadowData GetShadowData(Surface surfaceWS)
             break;
         }
     }
-    if (i == _CascadeCount)
+    if (i == _CascadeCount && _CascadeCount > 0)
     {
         data.strength = 0.0;
     }
@@ -143,6 +143,28 @@ ShadowData GetShadowData(Surface surfaceWS)
 
     data.cascadeIndex = i;
     return data;
+}
+
+float GetBakedShadow(ShadowMask mask, int channel)
+{
+    float shadow = 1.0;
+    if (mask.always || mask.distance)
+    {
+        if (channel >= 0)
+        {
+            shadow = mask.shadows[channel];
+    }
+        }
+    return shadow;
+}
+
+float GetBakedShadow(ShadowMask mask, int channel, float strength)
+{
+    if (mask.always || mask.distance)
+    {
+        return lerp(1.0, GetBakedShadow(mask, channel), strength);
+    }
+    return 1.0;
 }
 
 float GetCascadedShadow (
@@ -176,25 +198,10 @@ float GetCascadedShadow (
     return shadow;
 }
 
-float GetBakedShadow(ShadowMask mask, int channel)
+float GetOtherShadow(
+    OtherShadowData other, ShadowData global, Surface surfaceWS
+)
 {
-    float shadow = 1.0;
-    if (mask.always || mask.distance)
-    {
-        if (channel >= 0)
-        {
-            shadow = mask.shadows[channel];
-    }
-        }
-    return shadow;
-}
-
-float GetBakedShadow(ShadowMask mask, int channel, float strength)
-{
-    if (mask.always || mask.distance)
-    {
-        return lerp(1.0, GetBakedShadow(mask, channel), strength);
-    }
     return 1.0;
 }
 
@@ -231,7 +238,9 @@ float GetDirectionalShadowAttenuation(
     float shadow;
     if (directional.strength * global.strength <= 0.0)
     {
-        shadow = GetBakedShadow(global.shadowMask, directional.shadowMaskChannel, abs(directional.strength));
+        shadow = GetBakedShadow(
+            global.shadowMask, directional.shadowMaskChannel, abs(directional.strength)
+        );
     }
     else
     {
@@ -251,7 +260,7 @@ float GetOtherShadowAttenuation(
     #endif
 
     float shadow;
-    if (other.strength > 0.0)
+    if (other.strength * global.strength <= 0.0)
     {
         shadow = GetBakedShadow(
             global.shadowMask, 
@@ -261,7 +270,10 @@ float GetOtherShadowAttenuation(
     }
     else
     {
-        shadow = 1.0;
+        shadow = GetOtherShadow(other, global, surfaceWS);
+        shadow = MixBakedAndRealTimeShadows(
+            global, shadow, other.shadowMaskChannel, other.strength
+        );
     }
     return shadow;
 }

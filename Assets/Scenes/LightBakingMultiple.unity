@@ -2408,7 +2408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cc283a8d3950bc44ba94fc17c16805a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  baseColor: {r: 0.6226415, g: 0.6226415, b: 0.6226415, a: 1}
   alphaCutoff: 0.5
   metallic: 0.3
   smoothness: 0.5

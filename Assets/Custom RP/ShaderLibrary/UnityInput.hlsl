@@ -7,6 +7,9 @@ CBUFFER_START(UnityPerDraw)
     float4 unity_LODFade;
     real4 unity_WorldTransformParams;
 
+    real4 unity_LightData;
+    real4 unity_LightIndices[2];
+
     float4 unity_LightmapST;
     float4 unity_DynamicLightmapST;
     float4 unity_ProbesOcclusion;
