@@ -7,7 +7,8 @@ partial class CameraRenderer
 {
     partial void DrawUnsupportedShaders();
 
-    partial void DrawGizmos();
+    partial void DrawGizmosBeforeFX();
+    partial void DrawGizmosAfterFX();
 
     partial void PrepareBuffer();
 
@@ -47,10 +48,16 @@ partial class CameraRenderer
         );
     }
 
-    partial void DrawGizmos()
+    partial void DrawGizmosBeforeFX()
     {
         if (Handles.ShouldRenderGizmos()) {
             context.DrawGizmos(camera, GizmoSubset.PreImageEffects);
+        }
+    }
+
+    partial void DrawGizmosAfterFX()
+    {
+        if (Handles.ShouldRenderGizmos()) {
             context.DrawGizmos(camera, GizmoSubset.PostImageEffects);
         }
     }
