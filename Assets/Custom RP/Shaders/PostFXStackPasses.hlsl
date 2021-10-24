@@ -1,15 +1,31 @@
 #ifndef CUSTOM_POST_FX_PASSES_INCLUDED
 #define CUSTOM_POST_FX_PASSES_INCLUDED
 
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Filtering.hlsl"
+
 float4 _ProjectionParams;
 float4 _PostFXSource_TexelSize;
 
 TEXTURE2D(_PostFXSource);
+TEXTURE2D(_PostFXSource2);
 SAMPLER(sampler_linear_clamp);
 
 float4 GetSource(float2 screenUV)
 {
     return SAMPLE_TEXTURE2D_LOD(_PostFXSource, sampler_linear_clamp, screenUV, 0);
+}
+
+float4 GetSource2(float2 screenUV)
+{
+    return SAMPLE_TEXTURE2D_LOD(_PostFXSource2, sampler_linear_clamp, screenUV, 0);
+}
+
+float4 GetSourceBicubic(float2 screenUV)
+{
+    return SampleTexture2DBicubic(
+        TEXTURE2D_ARGS(_PostFXSource, sampler_linear_clamp), screenUV, 
+        _PostFXSource_TexelSize.zwxy, 1.0, 0.0
+    );
 }
 
 struct Varyings
@@ -93,6 +109,24 @@ float4 BloomVerticalPassFragment(Varyings input) : SV_TARGET
     }
 
     return float4(color, 1.0);
+}
+
+bool _BloomBicubicUpsampling;
+
+float4 BloomCombinedPassFragment(Varyings input) : SV_TARGET
+{
+    // float3 lowRes = GetSource(input.screenUV).rgb;
+    float3 lowRes;
+    if (_BloomBicubicUpsampling)
+    { 
+        lowRes = GetSourceBicubic(input.screenUV).rgb;
+    }
+    else
+    {
+        lowRes = GetSource(input.screenUV).rgb;
+    }
+    float3 highRes = GetSource2(input.screenUV).rgb;
+    return float4(lowRes + highRes, 1.0);
 }
 
 #endif
