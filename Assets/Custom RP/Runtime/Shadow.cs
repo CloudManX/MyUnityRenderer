@@ -331,7 +331,7 @@ public class Shadows
     {
         int atlasSize = (int)settings.directional.atlasSize;
         atlasSizes.x = atlasSize;
-        atlasSizes.y = 1 / atlasSize;
+        atlasSizes.y = 1f / atlasSize;
         buffer.GetTemporaryRT(
             dirShadowAtlasId, 
             atlasSize, 
@@ -406,7 +406,7 @@ public class Shadows
             dirShadowMatrices[tileIndex] = ConvertToAtlasMatrix(
                 projectionMatrix * viewMatrix,
                 SetTileViewport(tileIndex, split, tileSize),
-                split
+                1f / split
             );
             buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
             //SCVBB, pushing object away from light in shadow caster

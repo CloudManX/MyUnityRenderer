@@ -240,6 +240,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.3
   smoothness: 0.9
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &133137542
 SphereCollider:
@@ -354,6 +356,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0
   smoothness: 0.5
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &184386755
 BoxCollider:
@@ -471,9 +475,9 @@ Light:
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.534
-    m_NormalBias: 0.955
-    m_NearPlane: 0.1
+    m_Bias: 0.61
+    m_NormalBias: 1.18
+    m_NearPlane: 2.32
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -582,6 +586,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0
   smoothness: 0.9
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &216363782
 SphereCollider:
@@ -696,6 +702,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.3
   smoothness: 0.9
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &287210295
 SphereCollider:
@@ -907,6 +915,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0
   smoothness: 0.9
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &374039201
 SphereCollider:
@@ -1021,6 +1031,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.7
   smoothness: 0.7
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &423589667
 BoxCollider:
@@ -1218,6 +1230,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.3
   smoothness: 0.9
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &498989559
 SphereCollider:
@@ -1332,6 +1346,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0
   smoothness: 0.5
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &584360855
 BoxCollider:
@@ -1446,6 +1462,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.7
   smoothness: 0.7
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &831155374
 BoxCollider:
@@ -1829,6 +1847,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0
   smoothness: 0.5
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1234894332
 GameObject:
@@ -1866,6 +1886,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.7
   smoothness: 0.7
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &1234894334
 BoxCollider:
@@ -2076,6 +2098,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0
   smoothness: 0.5
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &1510951287
 BoxCollider:
@@ -2272,6 +2296,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.3
   smoothness: 0.5
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &1684112599
 GameObject:
@@ -2309,6 +2335,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.3
   smoothness: 0.9
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1684112601
 SphereCollider:
@@ -2425,6 +2453,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0.3
   smoothness: 0.9
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1836226941
 SphereCollider:
@@ -2541,6 +2571,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   metallic: 0
   smoothness: 0.5
+  occlusion: 0.5
+  fresnelStrength: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &2071463945
 BoxCollider:
