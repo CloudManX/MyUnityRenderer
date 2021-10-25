@@ -16,9 +16,13 @@ public class CustomRenderPipelineAsset : RenderPipelineAsset
     [SerializeField]
     PostFXSettings postFXSettings = default;
 
+    [SerializeField]
+    bool allowHDR = true;
+
     protected override RenderPipeline CreatePipeline()
     {
         return new CustomRenderPipeline(
+            allowHDR,
             useDynamicBatching, useGPUInstancing, useSRPBatcher, 
             useLightsPerObject, shadowSettings, postFXSettings   
         );
@@ -34,12 +38,16 @@ public partial class CustomRenderPipeline : RenderPipeline
 
     PostFXSettings postFXSettings;
 
+    bool allowHDR;
+
     public CustomRenderPipeline(
+        bool allowHDR,
         bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher,
         bool useLightsPerObject, ShadowSettings shadowSettings,
         PostFXSettings postFXSettings
     )
     {
+        this.allowHDR = allowHDR;
         this.shadowSettings = shadowSettings;
         this.postFXSettings = postFXSettings;
         this.useDynamicBatching = useDynamicBatching;
@@ -59,7 +67,7 @@ public partial class CustomRenderPipeline : RenderPipeline
         foreach (Camera cam in cameras)
         {
             renderer.Render(
-                context, cam, 
+                context, cam, allowHDR,
                 useDynamicBatching, useGPUInstancing, useLightsPerObject,
                 shadowSettings,
                 postFXSettings

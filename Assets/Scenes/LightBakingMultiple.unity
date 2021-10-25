@@ -477,7 +477,7 @@ Light:
     m_Strength: 1
     m_Bias: 0.534
     m_NormalBias: 0.955
-    m_NearPlane: 0.1
+    m_NearPlane: 2.28
     m_CullingMatrixOverride:
       e00: 1
       e01: 0

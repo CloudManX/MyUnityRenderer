@@ -18,5 +18,5 @@ MonoBehaviour:
     downscaleLimit: 1
     bicubicUpsampling: 1
     threshold: 0.5
-    thresholdKnee: 0.432
-    intensity: 0.2
+    thresholdKnee: 0.505
+    intensity: 0.41

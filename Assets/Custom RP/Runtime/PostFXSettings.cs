@@ -90,6 +90,9 @@ public partial class PostFXStack
     const int maxBloomPyramidLevels = 16;
     int bloomPyramidId;
 
+    // HDR
+    bool useHDR;
+
     public PostFXStack()
     {
         bloomPyramidId = Shader.PropertyToID("_BloomPyramid0");
@@ -100,9 +103,11 @@ public partial class PostFXStack
     }
 
     public void Setup(
-        ScriptableRenderContext context, Camera camera, PostFXSettings settings
+        ScriptableRenderContext context, Camera camera, PostFXSettings settings, 
+        bool useHDR
     )
     {
+        this.useHDR = useHDR;
         this.context = context;
         this.camera = camera;
         this.settings =
@@ -147,7 +152,8 @@ public partial class PostFXStack
         thresholdVec.w = 1f / (4f * tk + 0.00001f);
         buffer.SetGlobalVector(bloomThresholdId, thresholdVec);        
 
-        RenderTextureFormat format = RenderTextureFormat.Default;
+        RenderTextureFormat format = useHDR ? 
+            RenderTextureFormat.DefaultHDR : RenderTextureFormat.Default;
         
         // Half Resolution of Blooming, increase rendering speed by reducing bloom loops
         int width = camera.pixelWidth / 2, height = camera.pixelHeight / 2;
