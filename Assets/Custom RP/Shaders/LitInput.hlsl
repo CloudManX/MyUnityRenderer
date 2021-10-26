@@ -29,6 +29,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailAlbedo)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailSmoothness)
     UNITY_DEFINE_INSTANCED_PROP(float, _NormalScale)
+    UNITY_DEFINE_INSTANCED_PROP(float, _Intensity)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailNormalScale)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 

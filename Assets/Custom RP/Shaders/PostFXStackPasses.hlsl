@@ -1,13 +1,14 @@
 #ifndef CUSTOM_POST_FX_PASSES_INCLUDED
 #define CUSTOM_POST_FX_PASSES_INCLUDED
 
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Filtering.hlsl"
 
 float4 _ProjectionParams;
 float4 _PostFXSource_TexelSize;
 
 TEXTURE2D(_PostFXSource);
-TEXTURE2D(_PostFXSource2);
+TEXTURE2D(_PostFXSourceAuxiliary);
 SAMPLER(sampler_linear_clamp);
 
 float4 GetSource(float2 screenUV)
@@ -15,9 +16,9 @@ float4 GetSource(float2 screenUV)
     return SAMPLE_TEXTURE2D_LOD(_PostFXSource, sampler_linear_clamp, screenUV, 0);
 }
 
-float4 GetSource2(float2 screenUV)
+float4 GetSourceAuxiliary(float2 screenUV)
 {
-    return SAMPLE_TEXTURE2D_LOD(_PostFXSource2, sampler_linear_clamp, screenUV, 0);
+    return SAMPLE_TEXTURE2D_LOD(_PostFXSourceAuxiliary, sampler_linear_clamp, screenUV, 0);
 }
 
 float4 GetSourceBicubic(float2 screenUV)
@@ -114,7 +115,7 @@ float4 BloomVerticalPassFragment(Varyings input) : SV_TARGET
 bool _BloomBicubicUpsampling;
 float _BloomIntensity;
 
-float4 BloomCombinedPassFragment(Varyings input) : SV_TARGET
+float4 BloomAddPassFragment(Varyings input) : SV_TARGET
 {
     // float3 lowRes = GetSource(input.screenUV).rgb;
     float3 lowRes;
@@ -126,8 +127,23 @@ float4 BloomCombinedPassFragment(Varyings input) : SV_TARGET
     {
         lowRes = GetSource(input.screenUV).rgb;
     }
-    float3 highRes = GetSource2(input.screenUV).rgb;
+    float3 highRes = GetSourceAuxiliary(input.screenUV).rgb;
     return float4(lowRes * _BloomIntensity + highRes, 1.0);
+}
+
+float4 BloomScatterPassFragment(Varyings input) : SV_Target
+{
+    float3 lowRes;
+    if (_BloomBicubicUpsampling)
+    {
+        lowRes = GetSourceBicubic(input.screenUV).rgb;
+    }
+    else
+    {
+        lowRes = GetSource(input.screenUV).rgb;
+    }
+    float3 highRes = GetSourceAuxiliary(input.screenUV).rgb;
+    return float4(lerp(highRes, lowRes, saturate(_BloomIntensity)), 1.0);
 }
 
 // Knee Threshold
@@ -144,10 +160,77 @@ float3 ApplyBloomThreshold(float3 color)
     return color * contribution;
 }
 
+float4 BloomFinalPassFragment(Varyings input) : SV_Target
+{
+    float3 lowRes;
+    if (_BloomBicubicUpsampling)
+    {
+        lowRes = GetSourceBicubic(input.screenUV).rgb;
+    }
+    else
+    {
+        lowRes = GetSource(input.screenUV).rgb;
+    }
+    float3 highRes = GetSourceAuxiliary(input.screenUV).rgb;
+    lowRes += highRes - ApplyBloomThreshold(highRes);
+    return float4(lerp(highRes, lowRes, saturate(_BloomIntensity)), 1.0);
+}
+
 float4 BloomPrefilterPassFragment(Varyings input) : SV_Target
 {
     float3 color = ApplyBloomThreshold(GetSource(input.screenUV).rgb);
     return float4(color, 1.0);
+}
+
+float4 BloomPrefilterFadeFirefliesPassFragment(Varyings input) : SV_Target
+{
+    float2 offsets[5] =
+    {
+        float2(0.0, 0.0),
+        float2(-1.0, -1.0), float2(-1.0, 1.0), float2(1.0, -1.0), float2(1.0, 1.0),
+		// float2(-1.0, 0.0), float2(1.0, 0.0), float2(0.0, -1.0), float2(0.0, 1.0)
+    };
+
+    float3 color = 0.0;
+    float weightedSum = 0.0;
+
+    for (int i = 0; i < 5; ++i)
+    {
+        float3 c = GetSource(
+            input.screenUV + offsets[i] * GetSourceTexelSize().xy * 2.0
+        ).rgb;
+        c = ApplyBloomThreshold(c);
+        float w = 1.0 / (Luminance(c) + 1.0);
+        color += c * w;
+        weightedSum += w;
+    }   
+    color /= weightedSum;
+    return float4(color, 1.0);
+}
+
+// Tone Mapping 
+float4 ToneMappingACESPassFragment(Varyings input) : SV_Target
+{
+    float4 color = GetSource(input.screenUV);
+    color.rgb = min(color.rgb, 60.0);
+    color.rgb = AcesTonemap(unity_to_ACES(color.rgb));
+    return color;
+}
+
+float4 ToneMappingNeutralPassFragment(Varyings input) : SV_Target
+{
+    float4 color = GetSource(input.screenUV);
+    color.rgb = min(color.rgb, 60.0);
+    color.rgb = NeutralTonemap(color.rgb);
+    return color;
+}
+
+float4 ToneMappingReinhardPassFragment(Varyings input) : SV_Target
+{
+    float4 color = GetSource(input.screenUV);
+    color.rgb = min(color.rgb, 60.0);
+    color.rgb /= color.rgb + 1.0;
+    return color;
 }
 
 #endif

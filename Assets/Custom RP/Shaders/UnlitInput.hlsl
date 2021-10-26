@@ -14,6 +14,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
     UNITY_DEFINE_INSTANCED_PROP(float, _Metallic)
     UNITY_DEFINE_INSTANCED_PROP(float, _Smoothness)
+	UNITY_DEFINE_INSTANCED_PROP(float, _Intensity)
 	UNITY_DEFINE_INSTANCED_PROP(float4, _EmissionColor)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
@@ -27,7 +28,8 @@ float4 GetBase(float2 baseUV)
 {
     float4 map = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, baseUV);
     float4 color = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
-    return map * color;
+    float intensity = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Intensity); 
+    return map * color * intensity;
 }
 
 float GetCutoff(float2 baseUV)

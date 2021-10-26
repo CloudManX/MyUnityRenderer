@@ -21,9 +21,9 @@ MonoBehaviour:
     distanceFade: 0.258
     directional:
       atlasSize: 2048
-      filter: 0
+      filter: 3
       cascadeCount: 4
-      cascadeRatio1: 0.131
+      cascadeRatio1: 0.1
       cascadeRatio2: 0.25
       cascadeRatio3: 0.5
       cascadeFade: 0.001
@@ -32,3 +32,4 @@ MonoBehaviour:
       atlasSize: 2048
       filter: 3
   postFXSettings: {fileID: 11400000, guid: 4ddcffebeafc06647aff9864c2552a08, type: 2}
+  allowHDR: 1

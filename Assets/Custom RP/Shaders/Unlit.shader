@@ -3,7 +3,7 @@ Shader "CustomRP/Unlit"
 
 	HLSLINCLUDE
 	#include "../ShaderLibrary/Common.hlsl"
-	#include "LitInput.hlsl"
+	#include "UnlitInput.hlsl"
 	ENDHLSL
 
 	Properties 

@@ -161,6 +161,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &133137542
 SphereCollider:
@@ -291,6 +292,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &171749339
 SphereCollider:
@@ -355,6 +357,123 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 171749336}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &174587459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 174587464}
+  - component: {fileID: 174587463}
+  - component: {fileID: 174587462}
+  - component: {fileID: 174587461}
+  - component: {fileID: 174587460}
+  m_Layer: 0
+  m_Name: UnlitCube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &174587460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174587459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc283a8d3950bc44ba94fc17c16805a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseColor: {r: 0, g: 0.8705883, b: 1, a: 1}
+  alphaCutoff: 0.5
+  metallic: 0
+  smoothness: 0.5
+  occlusion: 0.5
+  fresnelStrength: 1
+  intensity: 5
+  emissionColor: {r: 1, g: 0.94629025, b: 0, a: 1}
+--- !u!65 &174587461
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174587459}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &174587462
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174587459}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 258a8b09316034e4fb76b24c9193d641, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &174587463
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174587459}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &174587464
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174587459}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.097, y: -2.33, z: -4.221}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &287210293
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,6 +512,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &287210295
 SphereCollider:
@@ -603,6 +723,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &374039201
 SphereCollider:
@@ -719,6 +840,7 @@ MonoBehaviour:
   smoothness: 0.7
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &423589667
 BoxCollider:
@@ -848,7 +970,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 71.3
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -873,13 +995,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482065889}
-  m_LocalRotation: {x: 0.47264042, y: -0.13916276, z: 0.075873986, w: 0.86688405}
-  m_LocalPosition: {x: 5.73, y: 6.97, z: -7.5}
+  m_LocalRotation: {x: 0.3336099, y: -0.30917764, z: 0.1168285, w: 0.882873}
+  m_LocalPosition: {x: 8.73, y: 3.56, z: -6.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 57.2, y: -18.24, z: 0}
+  m_LocalEulerAnglesHint: {x: 41.4, y: -38.6, z: 0}
 --- !u!1 &498989557
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,6 +1040,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &498989559
 SphereCollider:
@@ -1048,6 +1171,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &576813769
 SphereCollider:
@@ -1164,6 +1288,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &582056427
 SphereCollider:
@@ -1266,6 +1391,7 @@ MonoBehaviour:
   smoothness: 0.5
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &584360855
 BoxCollider:
@@ -1396,6 +1522,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &705049837
 SphereCollider:
@@ -1512,6 +1639,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &758408046
 SphereCollider:
@@ -1614,6 +1742,7 @@ MonoBehaviour:
   smoothness: 0.7
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &831155374
 BoxCollider:
@@ -1807,6 +1936,7 @@ MonoBehaviour:
   smoothness: 0.5
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0.05385971, g: 1, b: 0, a: 1}
 --- !u!1 &1202251361
 GameObject:
@@ -1860,6 +1990,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1202251364
 SphereCollider:
@@ -1953,8 +2084,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
+  m_Intensity: 30
+  m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -2011,11 +2142,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209671087}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.69, y: -0.22, z: 0.38}
+  m_LocalPosition: {x: 4.3, y: -0.2, z: 1.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1227682491
 GameObject:
@@ -2132,6 +2263,7 @@ MonoBehaviour:
   smoothness: 0.5
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1234894332
 GameObject:
@@ -2171,6 +2303,7 @@ MonoBehaviour:
   smoothness: 0.7
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &1234894334
 BoxCollider:
@@ -2301,6 +2434,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1265569746
 SphereCollider:
@@ -2417,6 +2551,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1410333477
 SphereCollider:
@@ -2519,6 +2654,7 @@ MonoBehaviour:
   smoothness: 0.5
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!65 &1510951287
 BoxCollider:
@@ -2636,6 +2772,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1606232963
 SphereCollider:
@@ -2840,6 +2977,7 @@ MonoBehaviour:
   smoothness: 0.5
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &1684112599
 GameObject:
@@ -2879,6 +3017,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1684112601
 SphereCollider:
@@ -3014,6 +3153,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1745767217
 SphereCollider:
@@ -3078,6 +3218,99 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1745767214}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1791091825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1791091827}
+  - component: {fileID: 1791091826}
+  m_Layer: 0
+  m_Name: Spot Light (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1791091826
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791091825}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 0.045939445, g: 0, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 76.62868
+  m_InnerSpotAngle: 42.51544
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 1.475
+    m_NormalBias: 1.75
+    m_NearPlane: 2.21
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1791091827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791091825}
+  m_LocalRotation: {x: -0.2968888, y: 0.74888104, z: -0.30548635, w: -0.5076538}
+  m_LocalPosition: {x: 7.77, y: 2.37, z: -3.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 130.626, y: -297.23102, z: 168.078}
 --- !u!1 &1792439831
 GameObject:
   m_ObjectHideFlags: 0
@@ -3130,6 +3363,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1792439834
 SphereCollider:
@@ -3232,6 +3466,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1836226941
 SphereCollider:
@@ -3364,6 +3599,7 @@ MonoBehaviour:
   smoothness: 0.9
   occlusion: 0.5
   fresnelStrength: 1
+  intensity: 1
   emissionColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!135 &1956771804
 SphereCollider:

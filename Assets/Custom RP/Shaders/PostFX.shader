@@ -31,7 +31,6 @@ Shader "Hidden/Custom RP/Post FX Stack"
 				#pragma vertex DefaultPassVertex
 				#pragma fragment BloomHorizontalPassFragment
 			ENDHLSL
-
 		}
 
 		Pass 
@@ -43,17 +42,38 @@ Shader "Hidden/Custom RP/Post FX Stack"
 				#pragma vertex DefaultPassVertex
 				#pragma fragment BloomVerticalPassFragment
 			ENDHLSL
-
 		}
 
 		Pass 
 		{
-			Name "Bloom Combine"
+			Name "Bloom Add"
 
 			HLSLPROGRAM
 				#pragma target 3.5
 				#pragma vertex DefaultPassVertex
-				#pragma fragment BloomCombinedPassFragment
+				#pragma fragment BloomAddPassFragment
+			ENDHLSL
+		}
+
+		Pass 
+		{
+			Name "Bloom Scatter"
+
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment BloomScatterPassFragment
+			ENDHLSL
+		}
+
+		Pass 
+		{
+			Name "Bloom Final"
+
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment BloomFinalPassFragment
 			ENDHLSL
 
 		}
@@ -67,7 +87,51 @@ Shader "Hidden/Custom RP/Post FX Stack"
 				#pragma vertex DefaultPassVertex
 				#pragma fragment BloomPrefilterPassFragment
 			ENDHLSL
-
 		}
+
+		Pass 
+		{
+			Name "Bloom PrefilterFadeFireflies"
+
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment BloomPrefilterFadeFirefliesPassFragment
+			ENDHLSL
+		}
+
+		Pass 
+		{
+			Name "ToneMapping ACES"
+
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment ToneMappingACESPassFragment
+			ENDHLSL
+		}
+
+		Pass 
+		{
+			Name "ToneMapping Neutral"
+
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment ToneMappingNeutralPassFragment
+			ENDHLSL
+		}
+
+		Pass 
+		{
+			Name "ToneMapping Reinhard"
+
+			HLSLPROGRAM
+				#pragma target 3.5
+				#pragma vertex DefaultPassVertex
+				#pragma fragment ToneMappingReinhardPassFragment
+			ENDHLSL
+		}
+		
 	}
 }
