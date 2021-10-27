@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using static PostFXSettings;
 
 [CreateAssetMenu(menuName = "Rendering/Custom Post FX Settings")]
-
-public class PostFXSettings : ScriptableObject
+public partial class PostFXSettings : ScriptableObject
 {
     [SerializeField]
     Shader shader = default;
@@ -65,7 +65,7 @@ public class PostFXSettings : ScriptableObject
     [System.Serializable]
     public struct ToneMappingSettings
     {
-        public enum Mode { None = -1, ACES, Neutral, Reinhard }
+        public enum Mode { None, ACES, Neutral, Reinhard }
 
         public Mode mode;
     }
@@ -88,7 +88,9 @@ public partial class PostFXStack
         bloomThresholdId = Shader.PropertyToID("_BloomThreshold"),
         bloomIntensityId = Shader.PropertyToID("_BloomIntensity"),
         fxSourceId = Shader.PropertyToID("_PostFXSource"),
-        fxSourceAuxId = Shader.PropertyToID("_PostFXSourceAuxiliary");
+        fxSourceAuxId = Shader.PropertyToID("_PostFXSourceAuxiliary"),
+        colorAdjustmentsId = Shader.PropertyToID("_ColorAdjustments"),
+        colorFilterId = Shader.PropertyToID("_ColorFilter");
 
     CommandBuffer buffer = new CommandBuffer
     {
@@ -105,6 +107,7 @@ public partial class PostFXStack
         BloomFinal,
         BloomPrefilter,
         BloomPrefilterFadeFireflies,
+        ToneMappingNone,
         ToneMappingACES,
         ToneMappingNeutral,
         ToneMappingReinhard
@@ -153,12 +156,12 @@ public partial class PostFXStack
         // Draw(sourceId, BuiltinRenderTextureType.CameraTarget, Pass.Copy);
         if (DrawBloom(sourceId))
         {
-            ApplyToneMapping(bloomResultId);
+            ApplyColorGradingAndToneMapping(bloomResultId);
             buffer.ReleaseTemporaryRT(bloomResultId);
         }
         else
         {
-            ApplyToneMapping(sourceId);
+            ApplyColorGradingAndToneMapping(sourceId);
         }
         context.ExecuteCommandBuffer(buffer);
         buffer.Clear();
@@ -289,12 +292,26 @@ public partial class PostFXStack
         buffer.EndSample("Bloom");
         return true;
     }
-    void ApplyToneMapping(int sourceId)
+
+    void ConfigureColorAdjustments()
     {
-        PostFXSettings.ToneMappingSettings.Mode mode 
-            = settings.ToneMapping.mode;
-        Pass toneMappingPass = 
-            mode < 0 ? Pass.Copy : Pass.ToneMappingACES + (int)mode;
+        ColorAdjustmentSettings colorAdjustments = settings.ColorAdjustments;
+        buffer.SetGlobalVector(colorAdjustmentsId, new Vector4(
+            Mathf.Pow(2f, colorAdjustments.postExposure),
+            colorAdjustments.constrast * 0.01f + 1f, // range 0-2
+            colorAdjustments.hueShift / 360f, // range -1-1
+            colorAdjustments.saturation * 0.01f + 1f // range 0-2
+        ));
+
+        buffer.SetGlobalColor(colorFilterId, colorAdjustments.colorFilter.linear);
+    }
+
+    void ApplyColorGradingAndToneMapping(int sourceId)
+    {
+        ConfigureColorAdjustments();
+
+        ToneMappingSettings.Mode mode = settings.ToneMapping.mode;
+        Pass toneMappingPass = Pass.ToneMappingNone + (int)mode; 
         buffer.BeginSample("Tone Mapping");
         Draw(sourceId, BuiltinRenderTextureType.CameraTarget, toneMappingPass);
         buffer.EndSample("Tone Mapping");
