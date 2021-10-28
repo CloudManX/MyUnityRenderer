@@ -63,6 +63,7 @@ public partial class PostFXSettings : ScriptableObject
     };
 
     [System.Serializable]
+
     public struct ToneMappingSettings
     {
         public enum Mode { None, ACES, Neutral, Reinhard }
@@ -90,7 +91,10 @@ public partial class PostFXStack
         fxSourceId = Shader.PropertyToID("_PostFXSource"),
         fxSourceAuxId = Shader.PropertyToID("_PostFXSourceAuxiliary"),
         colorAdjustmentsId = Shader.PropertyToID("_ColorAdjustments"),
-        colorFilterId = Shader.PropertyToID("_ColorFilter");
+        colorFilterId = Shader.PropertyToID("_ColorFilter"),
+        whiteBalanceId = Shader.PropertyToID("_WhiteBalance"),
+        splitToningShadowsId = Shader.PropertyToID("_SplitToningShadows"),
+        splitToningHighlightsId = Shader.PropertyToID("_SplitToningHighlights");
 
     CommandBuffer buffer = new CommandBuffer
     {
@@ -306,9 +310,28 @@ public partial class PostFXStack
         buffer.SetGlobalColor(colorFilterId, colorAdjustments.colorFilter.linear);
     }
 
+    void ConfigureWhiteBalance()
+    {
+        WhiteBalanceSettings whiteBalance = settings.WhiteBalance;
+        buffer.SetGlobalVector(whiteBalanceId, ColorUtils.ColorBalanceToLMSCoeffs(
+            whiteBalance.temperature, whiteBalance.tint
+        ));
+    }
+
+    void ConfigureSplitToning()
+    {
+        SplitToningSettings splitToning = settings.SplitToning;
+        Color splitColor = splitToning.shadows;
+        splitColor.a = splitToning.balance * 0.01f;
+        buffer.SetGlobalColor(splitToningShadowsId, splitColor);
+        buffer.SetGlobalColor(splitToningHighlightsId, splitToning.highlights);
+    }
+
     void ApplyColorGradingAndToneMapping(int sourceId)
     {
         ConfigureColorAdjustments();
+        ConfigureWhiteBalance();
+        ConfigureSplitToning();
 
         ToneMappingSettings.Mode mode = settings.ToneMapping.mode;
         Pass toneMappingPass = Pass.ToneMappingNone + (int)mode; 

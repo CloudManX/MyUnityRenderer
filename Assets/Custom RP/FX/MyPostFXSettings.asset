@@ -24,13 +24,17 @@ MonoBehaviour:
     mode: 1
     scatter: 0.267
   toneMapping:
-    mode: 0
+    mode: 1
   colorAdjustments:
     postExposure: -0.5
     constrast: 9.6
     colorFilter: {r: 1, g: 1, b: 1, a: 0}
     hueShift: 0
-    saturation: 100
+    saturation: 0
   whiteBalance:
     temperature: 0
     tint: 0
+  splitToning:
+    shadows: {r: 0.2238044, g: 0.3661744, b: 0.7735849, a: 1}
+    highlights: {r: 1, g: 0.47266394, b: 0, a: 1}
+    balance: 0

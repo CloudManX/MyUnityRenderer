@@ -73,10 +73,30 @@ float4 GetSourceTexelSize()
 // Color Grading
 float4 _ColorAdjustments;
 float4 _ColorFilter;
+float4 _WhiteBalance;
+float4 _SplitToningShadows, _SplitToningHighlights;
 
 float3 ColorGradePostExposure(float3 color)
 {
     return color * _ColorAdjustments.x;
+}
+
+float3 ColorGradeWhiteBalance(float3 color)
+{
+    color = LinearToLMS(color);
+    color *= _WhiteBalance.rgb;
+    return LMSToLinear(color);
+}
+
+float3 ColorGradeSplitToning(float3 color)
+{
+    color = PositivePow(color, 1.0 / 2.2);
+    float t = saturate(Luminance(saturate(color)) + _SplitToningShadows.w);
+    float3 shadows = lerp(0.5, _SplitToningShadows.rgb, 1.0 - t);
+    float3 highlights = lerp(0.5, _SplitToningHighlights.rgb, t);
+    color = SoftLight(color, shadows);
+    color = SoftLight(color, highlights);
+    return PositivePow(color, 2.2);
 }
 
 float3 ColorGradeContrast (float3 color)
@@ -109,8 +129,10 @@ float3 ColorGrade(float3 color)
 {
     color = min(color, 60.0);
     color = ColorGradePostExposure(color);
+    color = ColorGradeWhiteBalance(color);
     color = ColorGradeContrast(color);
     color = ColorGradeColorFilter(color);
+    color = ColorGradeSplitToning(color);
     color = max(color, 0.0);
     color = ColorGradeHueShift(color);
     color = ColorGradeSaturation(color);
