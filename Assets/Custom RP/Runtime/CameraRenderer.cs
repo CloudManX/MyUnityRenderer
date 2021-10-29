@@ -33,7 +33,8 @@ public partial class CameraRenderer
         bool useGPUInstancing,
         bool useLightPerObject,
         ShadowSettings shadowSettings,
-        PostFXSettings postFXSettings
+        PostFXSettings postFXSettings,
+        int colorLUTResolution
     )
     {
         this.context = context;
@@ -53,7 +54,9 @@ public partial class CameraRenderer
         lighting.Setup(
             context, cullingResults, shadowSettings, useLightPerObject
         );
-        postFXStack.Setup(context, camera, postFXSettings, useHDR);
+        postFXStack.Setup(
+            context, camera, postFXSettings, useHDR, colorLUTResolution
+        );
         buffer.EndSample(SampleName);
         Setup();
         DrawVisibleGeometry(

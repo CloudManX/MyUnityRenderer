@@ -19,12 +19,18 @@ public class CustomRenderPipelineAsset : RenderPipelineAsset
     [SerializeField]
     bool allowHDR = true;
 
+    public enum ColorLUTResolution { _16 = 16, _32 = 32, _64 = 64}
+
+    [SerializeField]
+    ColorLUTResolution colorLUTResolution = ColorLUTResolution._32;
+
     protected override RenderPipeline CreatePipeline()
     {
         return new CustomRenderPipeline(
             allowHDR,
             useDynamicBatching, useGPUInstancing, useSRPBatcher, 
-            useLightsPerObject, shadowSettings, postFXSettings   
+            useLightsPerObject, shadowSettings, postFXSettings,
+            (int)colorLUTResolution
         );
     }
 }
@@ -40,11 +46,14 @@ public partial class CustomRenderPipeline : RenderPipeline
 
     bool allowHDR;
 
+    int colorLUTResolution;
+
     public CustomRenderPipeline(
         bool allowHDR,
         bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher,
         bool useLightsPerObject, ShadowSettings shadowSettings,
-        PostFXSettings postFXSettings
+        PostFXSettings postFXSettings,
+        int colorLUTResolution
     )
     {
         this.allowHDR = allowHDR;
@@ -53,6 +62,7 @@ public partial class CustomRenderPipeline : RenderPipeline
         this.useDynamicBatching = useDynamicBatching;
         this.useGPUInstancing = useGPUInstancing;
         this.useLightsPerObject = useLightsPerObject;
+        this.colorLUTResolution = colorLUTResolution; 
         GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
         GraphicsSettings.lightsUseLinearIntensity = true;
         
@@ -69,8 +79,7 @@ public partial class CustomRenderPipeline : RenderPipeline
             renderer.Render(
                 context, cam, allowHDR,
                 useDynamicBatching, useGPUInstancing, useLightsPerObject,
-                shadowSettings,
-                postFXSettings
+                shadowSettings, postFXSettings, colorLUTResolution
             );
         }
     }
