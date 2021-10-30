@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit Particle CustomRP
+  m_Name: Unlit Particle Flipbook CustomRP
   m_Shader: {fileID: 4800000, guid: 1859779fe542c5144ba602a0143a0182, type: 3}
-  m_ShaderKeywords: _VERTEX_COLORS
+  m_ShaderKeywords: _FLIPBOOK_BLENDING _VERTEX_COLORS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 31a3bc1c9cade054db7b89fadb70ce83, type: 3}
+        m_Texture: {fileID: 2800000, guid: caa6350e978c54041b77b865f921138e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -28,10 +28,11 @@ Material:
     - _Clipping: 0
     - _Cutoff: 0.5
     - _DstBlend: 10
+    - _FlipbookBlending: 1
     - _Intensity: 1
     - _SrcBlend: 5
     - _VertexColors: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.85657793, g: 0.9339623, b: 0, a: 1}
+    - _BaseColor: {r: 0, g: 0.631255, b: 0.93333334, a: 1}
   m_BuildTextureStacks: []
