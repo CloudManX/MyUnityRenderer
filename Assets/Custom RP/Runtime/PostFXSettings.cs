@@ -78,7 +78,7 @@ public partial class PostFXSettings : ScriptableObject
 
     public BloomSettings Bloom => bloom;
 
-    public bool LUTBanding;
+    public bool LUTBanding = false; 
 }
 
 public partial class PostFXStack
@@ -169,7 +169,7 @@ public partial class PostFXStack
         this.camera = camera;
         this.settings =
             camera.cameraType <= CameraType.SceneView ? settings : null;
-        if (this.settings.LUTBanding)
+        if (this.settings && this.settings.LUTBanding)
         {
             Shader.EnableKeyword(lutBandingKeyword);
         }
@@ -211,6 +211,19 @@ public partial class PostFXStack
         );
     }
 
+    void DrawFinal(RenderTargetIdentifier from)
+    {
+        buffer.SetGlobalTexture(fxSourceId, from);
+        buffer.SetRenderTarget(
+            BuiltinRenderTextureType.CameraTarget, 
+            RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store
+        );
+        buffer.SetViewport(camera.pixelRect);
+        buffer.DrawProcedural(
+            Matrix4x4.identity, settings.Material, (int)Pass.Final,
+            MeshTopology.Triangles, 3
+        );
+    }
     bool DrawBloom(int sourceId)
     {
         PostFXSettings.BloomSettings bloom = settings.Bloom;
@@ -402,7 +415,7 @@ public partial class PostFXStack
         buffer.SetGlobalVector(colorGradingLUTParametersId, new Vector4(
             1f / lutWidth, 1f / lutHeight, lutHeight - 1f
         ));
-        Draw(sourceId, BuiltinRenderTextureType.CameraTarget, Pass.Final);
+        DrawFinal(sourceId);
 
         buffer.EndSample("Color Grading and Tone Mapping");
     }

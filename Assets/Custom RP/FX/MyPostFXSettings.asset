@@ -25,7 +25,7 @@ MonoBehaviour:
     scatter: 0.279
   toneMapping:
     mode: 1
-    LUTBanding: 0
+  LUTBanding: 0
   colorAdjustments:
     postExposure: 0
     constrast: 9.6
