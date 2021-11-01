@@ -4,7 +4,6 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Filtering.hlsl"
 
-float4 _ProjectionParams;
 float4 _PostFXSource_TexelSize;
 
 TEXTURE2D(_PostFXSource);

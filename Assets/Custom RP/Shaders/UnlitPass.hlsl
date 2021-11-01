@@ -55,10 +55,14 @@ float4 UnlitPassFragment(Varyings input) : SV_TARGET
         config.color = input.color;
     #endif
 
-    #if defined(_FLIPBOOK_BLENDING)
-        config.flipbookUVB = input.flipbookUVB;
-        config.flipbookBlending = true;
-    #endif
+    // #if defined(_FLIPBOOK_BLENDING)
+    //     config.flipbookUVB = input.flipbookUVB;
+    //     config.flipbookBlending = true;
+    // #endif
+
+    // #if defined(_NEAR_FADE)
+    //     config.nearFade = true;
+    // #endif
 
     float4 base = GetBase(config);
 
