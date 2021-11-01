@@ -22,6 +22,11 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Macros.hlsl"
 
+SAMPLER(sampler_linear_clamp);
+SAMPLER(sampler_point_clamp);
+
+#include "Fragment.hlsl"
+
 
 float Square(float v)
 {
@@ -41,11 +46,11 @@ float3 DecodeNormal (float4 sample, float scale) {
 	#endif
 }
 
-void ClipLOD(float2 positionCS, float fade)
+void ClipLOD(Fragment fragment, float fade)
 {
     #if defined(LOD_FADE_CROSSFADE)
         // float dither = (positionCS.y % 32) / 32;
-        float dither = InterleavedGradientNoise(positionCS.xy, 0);
+        float dither = InterleavedGradientNoise(fragment.positionSS, 0);
         clip(fade + (fade < 0 ? dither : -dither));
     #endif
 }

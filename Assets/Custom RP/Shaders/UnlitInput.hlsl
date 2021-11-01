@@ -20,6 +20,7 @@ UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 struct InputConfig
 {
+    Fragment fragment;
     float4 color;
     float2 baseUV;
     float3 flipbookUVB;
@@ -32,8 +33,9 @@ float2 TransformBaseUV(float2 baseUV)
     return baseUV * baseST.xy + baseST.zw;
 }
 
-InputConfig GetInputConfig (float2 baseUV) {
+InputConfig GetInputConfig (float4 positionSS, float2 baseUV) {
 	InputConfig config;
+    config.fragment = GetFragment(positionSS);
     config.color = 1.0;
 	config.baseUV = baseUV;
     config.flipbookUVB = 0.0;

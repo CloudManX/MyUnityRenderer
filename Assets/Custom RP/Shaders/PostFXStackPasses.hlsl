@@ -9,8 +9,6 @@ float4 _PostFXSource_TexelSize;
 
 TEXTURE2D(_PostFXSource);
 TEXTURE2D(_PostFXSourceAuxiliary);
-SAMPLER(sampler_linear_clamp);
-SAMPLER(sampler_point_clamp);
 
 float Luminance(float3 color, bool useACES)
 {
@@ -37,14 +35,14 @@ float4 GetSourceBicubic(float2 screenUV)
 
 struct Varyings
 {
-    float4 positionCS : SV_POSITION;
+    float4 positionCS_SS : SV_POSITION;
     float2 screenUV : VAR_SCREEN_UV;
 };
 
 Varyings DefaultPassVertex(uint vertexID : SV_VertexID)
 {
     Varyings output;
-    output.positionCS = float4(
+    output.positionCS_SS = float4(
         // vertexID == 0: -1, -1
         // vertexID == 1: -1, 3
         // vertexID == 2: 3, -1

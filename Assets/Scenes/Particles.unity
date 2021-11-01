@@ -5893,7 +5893,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 71.3
+  field of view: 69
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -5918,13 +5918,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482065889}
-  m_LocalRotation: {x: 0.12236953, y: -0.2892242, z: 0.03730703, w: 0.9486745}
-  m_LocalPosition: {x: 8.73, y: 0.8, z: -8.86}
+  m_LocalRotation: {x: 0.39846182, y: -0.5924394, z: 0.42320725, w: 0.55779874}
+  m_LocalPosition: {x: 6.66, y: 5.21, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 14.7, y: -33.91, z: 0}
+  m_LocalEulerAnglesHint: {x: 71.08, y: -93.45, z: 0}
 --- !u!1 &498989557
 GameObject:
   m_ObjectHideFlags: 0
@@ -7716,7 +7716,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 4
+  m_RenderMode: 0
   m_SortMode: 1
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
@@ -8575,7 +8575,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
