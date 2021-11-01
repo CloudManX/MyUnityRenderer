@@ -21,9 +21,14 @@ public partial class CameraRenderer
 
     PostFXStack postFXStack = new PostFXStack();
 
-    static int frameBufferId = Shader.PropertyToID("_CameraFrameBuffer");
+    // static int frameBufferId = Shader.PropertyToID("_CameraFrameBuffer");
+    static int
+        colorAttachmentId = Shader.PropertyToID("_CameraColorAttachment"),
+        depthAttachmentId = Shader.PropertyToID("_CameraDepthAttachment"),
+        depthTextureId = Shader.PropertyToID("_CameraDepthTexture");
 
     bool useHDR;
+    bool useDepthTexture;
 
     public void Render(
         ScriptableRenderContext context,
@@ -48,6 +53,7 @@ public partial class CameraRenderer
             return;
         }
         useHDR = allowHDR && camera.allowHDR;
+        useDepthTexture = true;
 
         buffer.BeginSample(SampleName);
         ExecuteBuffer();
@@ -66,7 +72,7 @@ public partial class CameraRenderer
         DrawGizmosBeforeFX();
         if (postFXStack.IsActive)
         {
-            postFXStack.Render(frameBufferId);
+            postFXStack.Render(colorAttachmentId);
         }
         DrawGizmosAfterFX();
         Cleanup();
@@ -115,6 +121,9 @@ public partial class CameraRenderer
         // Skybox
         context.DrawSkybox(camera);
 
+        // Copy Depth buffer
+        CopyAttachments();
+
         // Draw Transparent Objects after Skybox
         sortingSettings.criteria = SortingCriteria.CommonTransparent;
         drawingSettings.sortingSettings = sortingSettings;
@@ -123,6 +132,19 @@ public partial class CameraRenderer
         context.DrawRenderers(
             cullingResults, ref drawingSettings, ref filteringSettings
         );
+    }
+
+    void CopyAttachments()
+    {
+        if (useDepthTexture)
+        {
+            buffer.GetTemporaryRT(
+                depthTextureId, camera.pixelWidth, camera.pixelHeight,
+                32, FilterMode.Point, RenderTextureFormat.Depth
+            );
+            buffer.CopyTexture(depthAttachmentId, depthTextureId);
+            ExecuteBuffer();
+        }
     }
 
     void Submit()
@@ -144,12 +166,18 @@ public partial class CameraRenderer
                 flags = CameraClearFlags.Color;
             }
             buffer.GetTemporaryRT(
-                frameBufferId, camera.pixelWidth, camera.pixelHeight,
-                32, FilterMode.Bilinear, useHDR ? 
+                colorAttachmentId, camera.pixelWidth, camera.pixelHeight,
+                0, FilterMode.Bilinear, useHDR ? 
                     RenderTextureFormat.DefaultHDR : RenderTextureFormat.Default
             );
+            buffer.GetTemporaryRT(
+                depthAttachmentId, camera.pixelWidth, camera.pixelHeight,
+                32, FilterMode.Point, RenderTextureFormat.Depth
+            );
             buffer.SetRenderTarget(
-                frameBufferId,
+                colorAttachmentId,
+                RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store,
+                depthAttachmentId,
                 RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store
             );
         }
@@ -186,7 +214,13 @@ public partial class CameraRenderer
         lighting.Cleanup();
         if (postFXStack.IsActive)
         {
-            buffer.ReleaseTemporaryRT(frameBufferId);
+            buffer.ReleaseTemporaryRT(colorAttachmentId);
+            buffer.ReleaseTemporaryRT(depthAttachmentId);
+        }
+
+        if(useDepthTexture)
+        {
+            buffer.ReleaseTemporaryRT(depthTextureId);
         }
     }
 }
