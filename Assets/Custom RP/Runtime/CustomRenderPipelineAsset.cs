@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 [CreateAssetMenu(menuName = "Rendering/Custom Render Pipeline")]
-public class CustomRenderPipelineAsset : RenderPipelineAsset 
+public class CustomRenderPipelineAsset : RenderPipelineAsset
 {
     [SerializeField]
-    bool useDynamicBatching = true, 
-        useGPUInstancing = true, 
+    bool useDynamicBatching = true,
+        useGPUInstancing = true,
         useSRPBatcher = true,
         useLightsPerObject = true;
 
@@ -17,54 +17,64 @@ public class CustomRenderPipelineAsset : RenderPipelineAsset
     PostFXSettings postFXSettings = default;
 
     [SerializeField]
-    bool allowHDR = true;
+    CameraBufferSettings cameraBuffer = new CameraBufferSettings
+    {
+        allowHDR = true
+    };
 
     public enum ColorLUTResolution { _16 = 16, _32 = 32, _64 = 64}
 
     [SerializeField]
     ColorLUTResolution colorLUTResolution = ColorLUTResolution._32;
 
+    [SerializeField]
+    Shader cameraRendererShader = default;
+
     protected override RenderPipeline CreatePipeline()
     {
         return new CustomRenderPipeline(
-            allowHDR,
+            cameraBuffer,
             useDynamicBatching, useGPUInstancing, useSRPBatcher, 
             useLightsPerObject, shadowSettings, postFXSettings,
-            (int)colorLUTResolution
+            (int)colorLUTResolution,
+            cameraRendererShader
         );
     }
 }
 
 public partial class CustomRenderPipeline : RenderPipeline 
 {
-    CameraRenderer renderer = new CameraRenderer();
+    CameraRenderer renderer;
 
     bool useDynamicBatching, useGPUInstancing, useLightsPerObject;
     ShadowSettings shadowSettings;
 
     PostFXSettings postFXSettings;
 
-    bool allowHDR;
+    CameraBufferSettings cameraBufferSettings;  
 
     int colorLUTResolution;
 
     public CustomRenderPipeline(
-        bool allowHDR,
+        CameraBufferSettings cameraBufferSettings,
         bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher,
         bool useLightsPerObject, ShadowSettings shadowSettings,
         PostFXSettings postFXSettings,
-        int colorLUTResolution
+        int colorLUTResolution,
+        Shader cameraRendererShader
     )
     {
-        this.allowHDR = allowHDR;
         this.shadowSettings = shadowSettings;
         this.postFXSettings = postFXSettings;
         this.useDynamicBatching = useDynamicBatching;
         this.useGPUInstancing = useGPUInstancing;
         this.useLightsPerObject = useLightsPerObject;
-        this.colorLUTResolution = colorLUTResolution; 
+        this.colorLUTResolution = colorLUTResolution;
+        this.cameraBufferSettings = cameraBufferSettings;
         GraphicsSettings.useScriptableRenderPipelineBatching = useSRPBatcher;
         GraphicsSettings.lightsUseLinearIntensity = true;
+
+        renderer = new CameraRenderer(cameraRendererShader);
         
         InitializeForEditor();
     }
@@ -77,7 +87,7 @@ public partial class CustomRenderPipeline : RenderPipeline
         foreach (Camera cam in cameras)
         {
             renderer.Render(
-                context, cam, allowHDR,
+                context, cam, cameraBufferSettings,
                 useDynamicBatching, useGPUInstancing, useLightsPerObject,
                 shadowSettings, postFXSettings, colorLUTResolution
             );

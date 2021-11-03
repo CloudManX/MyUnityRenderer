@@ -8,6 +8,7 @@ partial class CameraRenderer
     partial void DrawUnsupportedShaders();
 
     partial void DrawGizmosBeforeFX();
+
     partial void DrawGizmosAfterFX();
 
     partial void PrepareBuffer();
@@ -51,6 +52,11 @@ partial class CameraRenderer
     partial void DrawGizmosBeforeFX()
     {
         if (Handles.ShouldRenderGizmos()) {
+            if (useIntermediateBuffer)
+            {
+                Draw(depthAttachmentId, BuiltinRenderTextureType.CameraTarget, true);
+                ExecuteBuffer();
+            }
             context.DrawGizmos(camera, GizmoSubset.PreImageEffects);
         }
     }

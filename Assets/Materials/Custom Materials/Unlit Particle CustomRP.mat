@@ -9,11 +9,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Unlit Particle CustomRP
   m_Shader: {fileID: 4800000, guid: 1859779fe542c5144ba602a0143a0182, type: 3}
-  m_ShaderKeywords: _VERTEX_COLORS
+  m_ShaderKeywords: _SOFT_PARTICLES _VERTEX_COLORS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -28,10 +28,18 @@ Material:
     - _Clipping: 0
     - _Cutoff: 0.5
     - _DstBlend: 10
+    - _FlipbookBlending: 0
     - _Intensity: 1
+    - _NearFade: 0
+    - _NearFadeDistance: 1
+    - _NearFadeRange: 1.07
+    - _SoftParticleRange: 0.01
+    - _SoftParticles: 1
+    - _SoftParticlesDistance: 0
+    - _SoftParticlesRange: 2
     - _SrcBlend: 5
     - _VertexColors: 1
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.85657793, g: 0.9339623, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

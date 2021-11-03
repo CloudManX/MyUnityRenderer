@@ -15,6 +15,8 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 	UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
 	UNITY_DEFINE_INSTANCED_PROP(float, _NearFadeDistance)
 	UNITY_DEFINE_INSTANCED_PROP(float, _NearFadeRange)
+	UNITY_DEFINE_INSTANCED_PROP(float, _SoftParticlesDistance)
+	UNITY_DEFINE_INSTANCED_PROP(float, _SoftParticlesRange)
     UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
     UNITY_DEFINE_INSTANCED_PROP(float, _Metallic)
     UNITY_DEFINE_INSTANCED_PROP(float, _Smoothness)
@@ -66,11 +68,18 @@ float4 GetBase(InputConfig c)
     // if (c.nearFade)
     // {
     #if defined(_NEAR_FADE)
-        float nearAttenuation = (c.fragment.depth - INPUT_PROP(_NearFadeDistance)) /
+        float fadeNearAttenuation = (c.fragment.depth - INPUT_PROP(_NearFadeDistance)) /
             INPUT_PROP(_NearFadeRange);
-        baseMap.a *= saturate(nearAttenuation);
+        baseMap.a *= saturate(fadeNearAttenuation);
     #endif
     // }
+
+    #if defined(_SOFT_PARTICLES)
+        float depthDelta = c.fragment.bufferDepth - c.fragment.depth;
+        float spNearAttenuation = (depthDelta - INPUT_PROP(_SoftParticlesDistance)) /
+            INPUT_PROP(_SoftParticlesRange);
+        baseMap.a *= saturate(spNearAttenuation);
+    #endif
 
     float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
     float intensity = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _Intensity); 
