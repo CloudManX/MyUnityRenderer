@@ -31,9 +31,11 @@ MonoBehaviour:
     other:
       atlasSize: 2048
       filter: 3
-  postFXSettings: {fileID: 0}
+  postFXSettings: {fileID: 11400000, guid: 4ddcffebeafc06647aff9864c2552a08, type: 2}
   cameraBuffer:
     allowHDR: 1
+    copyColor: 1
+    copyColorReflection: 0
     copyDepth: 1
     copyDepthReflection: 0
   colorLUTResolution: 32

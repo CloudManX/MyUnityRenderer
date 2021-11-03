@@ -224,6 +224,7 @@ public partial class PostFXStack
             MeshTopology.Triangles, 3
         );
     }
+
     bool DrawBloom(int sourceId)
     {
         PostFXSettings.BloomSettings bloom = settings.Bloom;

@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Unlit Particle Flipbook CustomRP
   m_Shader: {fileID: 4800000, guid: 1859779fe542c5144ba602a0143a0182, type: 3}
-  m_ShaderKeywords: _FLIPBOOK_BLENDING _NEAR_FADE _SOFT_PARTICLES _VERTEX_COLORS
+  m_ShaderKeywords: _DISTORTION _FLIPBOOK_BLENDING _NEAR_FADE _SOFT_PARTICLES _VERTEX_COLORS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -23,10 +23,17 @@ Material:
         m_Texture: {fileID: 2800000, guid: caa6350e978c54041b77b865f921138e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DistortionMap:
+        m_Texture: {fileID: 2800000, guid: d55ec2bb85caa9944a4512e8e0060ea1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Clipping: 0
-    - _Cutoff: 0.5
+    - _Cutoff: 0.506
+    - _Distortion: 1
+    - _DistortionBlend: 0.261
+    - _DistortionStrength: 0.2
     - _DstBlend: 10
     - _FlipbookBlending: 1
     - _Intensity: 1
@@ -36,6 +43,7 @@ Material:
     - _SoftParticleRange: 2.33
     - _SoftParticles: 1
     - _SoftParticlesDistance: 0
+    - _SoftParticlesRange: 2.91
     - _SrcBlend: 5
     - _VertexColors: 1
     - _ZWrite: 0

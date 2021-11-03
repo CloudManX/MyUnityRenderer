@@ -21,6 +21,11 @@ Shader "CustomRP/Particles/Unlit"
 		_SoftParticlesDistance("Soft Particles Distance", Range(0.0, 10.0)) = 0
 		_SoftParticlesRange("Soft Particles Range", Range(0.01, 10.0)) = 0
 
+		[Toggle(_DISTORTION)] _Distortion ("Distortion", Float) = 0
+		[NoScaleOffset] _DistortionMap("Distortion Vectors", 2D) = "bumb" {}
+		_DistortionStrength("Distortion Strength", Range(0.0, 0.2)) = 0.1
+		_DistortionBlend("Distorition Blend", Range(0.0, 1.0)) = 1
+
 		_Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		[Toggle(_CLIPPING)] _Clipping("Alpha Clipping", Float) = 0
 		[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 1
@@ -42,6 +47,7 @@ Shader "CustomRP/Particles/Unlit"
 			#pragma shader_feature _FLIPBOOK_BLENDING
 			#pragma shader_feature _NEAR_FADE
 			#pragma shader_feature _SOFT_PARTICLES
+			#pragma shader_feature _DISTORTION
 			#pragma multi_compile_instancing
 			#pragma vertex UnlitPassVertex
 			#pragma fragment UnlitPassFragment
