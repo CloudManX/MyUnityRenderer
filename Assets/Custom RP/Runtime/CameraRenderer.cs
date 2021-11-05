@@ -23,17 +23,20 @@ public partial class CameraRenderer
 
     // static int frameBufferId = Shader.PropertyToID("_CameraFrameBuffer");
     static int
+        cameraBufferSizeId = Shader.PropertyToID("_CameraBufferSize"),
         colorAttachmentId = Shader.PropertyToID("_CameraColorAttachment"),
         depthAttachmentId = Shader.PropertyToID("_CameraDepthAttachment"),
         colorTextureId = Shader.PropertyToID("_CameraColorTexture"),
         depthTextureId = Shader.PropertyToID("_CameraDepthTexture"),
         sourceTextureId = Shader.PropertyToID("_SourceTexture");
 
-    bool useHDR;
+    bool useHDR, useScaledRendering;
     bool useColorTexture, useDepthTexture, useIntermediateBuffer;
 
     Material material;
     Texture2D missingTexture;
+
+    Vector2Int cameraBufferSize;
 
     public CameraRenderer(Shader shader)
     {
@@ -67,9 +70,15 @@ public partial class CameraRenderer
     {
         this.context = context;
         this.camera = camera;
-        
+
+        float renderScale = bufferSettings.renderScale;
+        useScaledRendering = renderScale < 0.99f || renderScale > 1.01f;
+
         // Pipeline Preparation
         PrepareBuffer(); 
+
+        // Scene Window Preparation
+        PrepareForSceneWindow();
 
         if (!Cull(shadowSettings.maxDistance))
         {
@@ -88,14 +97,29 @@ public partial class CameraRenderer
         }
 
         useHDR = bufferSettings.allowHDR && camera.allowHDR;
+        if (useScaledRendering)
+        {
+            cameraBufferSize.x = (int)(camera.pixelWidth * renderScale);
+            cameraBufferSize.y = (int)(camera.pixelHeight * renderScale);
+        }
+        else
+        {
+            cameraBufferSize.x = camera.pixelWidth;
+            cameraBufferSize.y = camera.pixelHeight;
+        }
 
         buffer.BeginSample(SampleName);
+        buffer.SetGlobalVector(cameraBufferSizeId, new Vector4(
+            1f / cameraBufferSize.x, 1f / cameraBufferSize.y,
+            cameraBufferSize.x, cameraBufferSize.y
+        ));
         ExecuteBuffer();
         lighting.Setup(
             context, cullingResults, shadowSettings, useLightPerObject
         );
         postFXStack.Setup(
-            context, camera, postFXSettings, useHDR, colorLUTResolution
+            context, camera, cameraBufferSize, postFXSettings, useHDR, 
+            colorLUTResolution, bufferSettings.bicubicRescaling
         );
         buffer.EndSample(SampleName);
 
@@ -199,7 +223,7 @@ public partial class CameraRenderer
         if (useColorTexture)
         {
             buffer.GetTemporaryRT(
-                colorTextureId, camera.pixelWidth, camera.pixelHeight,
+                colorTextureId, cameraBufferSize.x, cameraBufferSize.y,
                 0, FilterMode.Bilinear, useHDR ? 
                     RenderTextureFormat.DefaultHDR : RenderTextureFormat.Default
             );
@@ -215,7 +239,7 @@ public partial class CameraRenderer
         if (useDepthTexture)
         {
             buffer.GetTemporaryRT(
-                depthTextureId, camera.pixelWidth, camera.pixelHeight,
+                depthTextureId, cameraBufferSize.x, cameraBufferSize.y,
                 32, FilterMode.Point, RenderTextureFormat.Depth
             );
             if (copyTextureSupported)
@@ -253,7 +277,7 @@ public partial class CameraRenderer
         context.SetupCameraProperties(camera);
         CameraClearFlags flags = camera.clearFlags;
 
-        useIntermediateBuffer = 
+        useIntermediateBuffer = useScaledRendering ||
             useColorTexture || useDepthTexture || postFXStack.IsActive;
         if (useIntermediateBuffer)
         {
@@ -262,12 +286,12 @@ public partial class CameraRenderer
                 flags = CameraClearFlags.Color;
             }
             buffer.GetTemporaryRT(
-                colorAttachmentId, camera.pixelWidth, camera.pixelHeight,
+                colorAttachmentId, cameraBufferSize.x, cameraBufferSize.y,
                 0, FilterMode.Bilinear, useHDR ? 
                     RenderTextureFormat.DefaultHDR : RenderTextureFormat.Default
             );
             buffer.GetTemporaryRT(
-                depthAttachmentId, camera.pixelWidth, camera.pixelHeight,
+                depthAttachmentId, cameraBufferSize.x, cameraBufferSize.y,
                 32, FilterMode.Point, RenderTextureFormat.Depth
             );
             buffer.SetRenderTarget(

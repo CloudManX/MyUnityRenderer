@@ -30,9 +30,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _Clipping: 0
-    - _Cutoff: 0.506
+    - _Cutoff: 0.527
     - _Distortion: 1
-    - _DistortionBlend: 0.261
+    - _DistortionBlend: 0.193
     - _DistortionStrength: 0.2
     - _DstBlend: 10
     - _FlipbookBlending: 1

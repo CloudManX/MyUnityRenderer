@@ -13,6 +13,8 @@ partial class CameraRenderer
 
     partial void PrepareBuffer();
 
+    partial void PrepareForSceneWindow();
+
 #if UNITY_EDITOR
     static ShaderTagId[] legacyShaderTagIds =
     {
@@ -76,6 +78,16 @@ partial class CameraRenderer
         buffer.name = SampleName = camera.name;
         Profiler.EndSample();
     }
+
+    partial void PrepareForSceneWindow()
+    {
+        if (camera.cameraType == CameraType.SceneView)
+        {
+            ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);
+            useScaledRendering = false;
+        }
+    }
+
 #else
     const string SampleName = defaultBufferName;
 #endif

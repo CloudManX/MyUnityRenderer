@@ -366,4 +366,19 @@ float4 BloomPrefilterFadeFirefliesPassFragment(Varyings input) : SV_Target
     color /= weightedSum;
     return float4(color, 1.0);
 }
+
+bool _CopyBicubic;
+
+float4 FinalPassFragmentRescale(Varyings input) : SV_TARGET
+{
+    if (_CopyBicubic)
+    {
+        return GetSourceBicubic(input.screenUV);
+    }
+    else
+    {
+        return GetSource(input.screenUV);
+    }
+}
+
 #endif
