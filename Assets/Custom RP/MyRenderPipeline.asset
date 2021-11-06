@@ -26,7 +26,7 @@ MonoBehaviour:
       cascadeRatio1: 0.1
       cascadeRatio2: 0.25
       cascadeRatio3: 0.5
-      cascadeFade: 0.001
+      cascadeFade: 0.011
       cascadeBlend: 1
     other:
       atlasSize: 2048
@@ -40,5 +40,7 @@ MonoBehaviour:
     copyDepthReflection: 0
     renderScale: 1
     bicubicRescaling: 1
+    fxaa:
+      enabled: 1
   colorLUTResolution: 32
   cameraRendererShader: {fileID: 4800000, guid: 1a1064481aedc72439eecc9473a0d0b0, type: 3}

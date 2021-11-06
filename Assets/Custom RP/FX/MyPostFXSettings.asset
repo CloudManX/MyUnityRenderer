@@ -27,6 +27,7 @@ MonoBehaviour:
   toneMapping:
     mode: 1
   LUTBanding: 0
+  keepAlpha: 1
   colorAdjustments:
     postExposure: 0
     constrast: 9.6
