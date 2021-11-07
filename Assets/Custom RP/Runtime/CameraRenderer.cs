@@ -120,7 +120,7 @@ public partial class CameraRenderer
         postFXStack.Setup(
             context, camera, cameraBufferSize, postFXSettings, useHDR, 
             colorLUTResolution, bufferSettings.bicubicRescaling,
-            bufferSettings.fxaa, bufferSettings.keepAlpha
+            bufferSettings.fxaa, bufferSettings.fxaa.keepAlpha
         );
         buffer.EndSample(SampleName);
 

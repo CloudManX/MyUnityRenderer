@@ -188,6 +188,7 @@ Shader "Hidden/Custom RP/Post FX Stack"
 				#pragma target 3.5
 				#pragma vertex DefaultPassVertex
 				#pragma fragment FXAAPassFragment
+				#pragma multi_compile _ FXAA_QUALITY_MEDIUM FXAA_QUALITY_LOW
 				#include "FXAAPass.hlsl"
 			ENDHLSL
 		}
@@ -202,6 +203,7 @@ Shader "Hidden/Custom RP/Post FX Stack"
 				#define FXAA_ALPHA_CONTAINS_LUMA
 				#pragma vertex DefaultPassVertex
 				#pragma fragment FXAAPassFragment
+				#pragma multi_compile _ FXAA_QUALITY_MEDIUM FXAA_QUALITY_LOW
 				#include "FXAAPass.hlsl"
 			ENDHLSL
 		}
