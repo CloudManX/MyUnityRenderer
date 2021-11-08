@@ -26,7 +26,7 @@ MonoBehaviour:
       cascadeRatio1: 0.1
       cascadeRatio2: 0.25
       cascadeRatio3: 0.5
-      cascadeFade: 0.011
+      cascadeFade: 0.301
       cascadeBlend: 1
     other:
       atlasSize: 2048
@@ -38,8 +38,8 @@ MonoBehaviour:
     copyColorReflection: 0
     copyDepth: 1
     copyDepthReflection: 0
-    renderScale: 1
-    bicubicRescaling: 1
+    renderScale: 2
+    bicubicRescaling: 2
     fxaa:
       enabled: 1
       keepAlpha: 1
